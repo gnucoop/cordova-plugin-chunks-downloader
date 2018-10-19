@@ -26,5 +26,6 @@
         </config-file>
 
         <source-file src="src/android/ChunksDownloaderPlugin.java" target-dir="src/com/gnucoop/cordova/plugin" />
+        <source-file src="src/android/ChunksDownloaderDownloadStatus.java" target-dir="src/com/gnucoop/cordova/plugin" />
     </platform>
 </plugin>

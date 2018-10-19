@@ -1,4 +1,3 @@
-cordova.define("cordova-plugin-chunks-downloader.chunksDownloaderPlugin", function(require, exports, module) {
 function ChunksDownloaderPlugin() {}
 
 ChunksDownloaderPlugin.prototype.download = function(chunks, filename, successCallback, errorCallback) {
@@ -16,5 +15,3 @@ ChunksDownloaderPlugin.install = function() {
     return window.plugins.chunksDownloaderPlugin;
 };
 cordova.addConstructor(ChunksDownloaderPlugin.install);
-
-});

@@ -18,11 +18,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class ChunksDownloaderPlugin extends CordovaPlugin {
   private static final String CACHE_PREFERENCES_NAME = "chunksDownloaderPluginPrefs";
@@ -135,14 +134,14 @@ public class ChunksDownloaderPlugin extends CordovaPlugin {
 
       String filePath = getFilePath(dest, filename);
 
-      HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       long currentTime = System.currentTimeMillis();
       long expires = conn.getHeaderFieldDate("Expires", currentTime);
       long lastModified = conn.getHeaderFieldDate("Last-Modified", currentTime);
       long lastUpdateTime = getLastUpdate(url);
-      if (true || lastModified > lastUpdateTime || expires < lastUpdateTime) {
+      if (lastModified > lastUpdateTime || expires < lastUpdateTime) {
         int responseCode = conn.getResponseCode();
-        if (responseCode == HttpsURLConnection.HTTP_OK) {
+        if (responseCode == HttpURLConnection.HTTP_OK) {
           InputStream inputStream = conn.getInputStream();
           File file = new File(filePath);
           File parent = file.getParentFile();
@@ -171,7 +170,7 @@ public class ChunksDownloaderPlugin extends CordovaPlugin {
             }
           }
 
-          notifyDownloadStatus(callbackContext, ChunksDownloaderDownloaStatus.Downloading, dlProgress);
+          notifyDownloadStatus(callbackContext, ChunksDownloaderDownloadStatus.Downloading, dlProgress);
 
           FileOutputStream outputStream = new FileOutputStream(file);
 
@@ -183,7 +182,7 @@ public class ChunksDownloaderPlugin extends CordovaPlugin {
             if (fileLen > 0) {
               try {
                 dlProgress.put("progress", readLen / fileLen);
-                notifyDownloadStatus(callbackContext, ChunksDownloaderDownloaStatus.Downloading, dlProgress);
+                notifyDownloadStatus(callbackContext, ChunksDownloaderDownloadStatus.Downloading, dlProgress);
               } catch (JSONException e) {
                 Log.d(DEBUG_PREFIX, DOWNLOAD_NOTIFICATION_FAIILED);
               }
@@ -231,11 +230,11 @@ public class ChunksDownloaderPlugin extends CordovaPlugin {
     sharedPref.edit().putLong("last-update-" + url.toString(), System.currentTimeMillis()).apply();
   }
 
-  private void notifyDownloadStatus(CallbackContext callbackContext, ChunksDownloaderDownloaStatus status) {
+  private void notifyDownloadStatus(CallbackContext callbackContext, ChunksDownloaderDownloadStatus status) {
     notifyDownloadStatus(callbackContext, status, null);
   }
 
-  private void notifyDownloadStatus(CallbackContext callbackContext, ChunksDownloaderDownloaStatus status, JSONObject data) {
+  private void notifyDownloadStatus(CallbackContext callbackContext, ChunksDownloaderDownloadStatus status, JSONObject data) {
     if (data == null) {
       data = new JSONObject();
     }
@@ -253,7 +252,7 @@ public class ChunksDownloaderPlugin extends CordovaPlugin {
   private void notifyDownloadError(CallbackContext callbackContext, String error) {
     JSONObject data = new JSONObject();
     try {
-      data.put("status", ChunksDownloaderDownloaStatus.Error);
+      data.put("status", ChunksDownloaderDownloadStatus.Error);
       if (error != null) {
         data.put("error", error);
       }
