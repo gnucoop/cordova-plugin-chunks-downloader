@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-chunks-downloader" version="0.0.1">
+    <name>ChunksDownloaderPlugin</name>
+
+    <description></description>
+    <license>MIT</license>
+
+    <keywords>cordova,android,download,chunks</keywords>
+    <repo>https://github.com/gnucoop/cordova-plugin-chunks-downloader.git</repo>
+    <issue>https://github.com/gnucoop/cordova-plugin-chunks-downloader/issues</issue>
+  
+    <engines>
+        <engine name="cordova" version=">=3.0.0"/>
+    </engines>
+  
+    <js-module src="www/chunksDownloaderPlugin.js" name="chunksDownloaderPlugin">
+        <clobbers target="window.plugins.chunksDownloaderPlugin" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="ChunksDownloaderPlugin">
+                <param name="android-package" value="com.gnucoop.cordova.plugin.ChunksDownloaderPlugin"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/ChunksDownloaderPlugin.java" target-dir="src/com/gnucoop/cordova/plugin" />
+    </platform>
+</plugin>
